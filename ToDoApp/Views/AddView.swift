@@ -10,6 +10,11 @@ import SwiftUI
 struct AddView: View {
     
     @State var textFieldText: String = ""
+    @EnvironmentObject var lvm: ListViewModel
+    @Environment(\.dismiss) var dismiss
+    
+    @State var alertTitle: String = ""
+    @State var showAlert: Bool = false
     
     var body: some View {
         ScrollView {
@@ -20,7 +25,13 @@ struct AddView: View {
                     .background(Color.gray.opacity(0.3))
                     .cornerRadius(10)
                 Button {
-                    
+                    if lvm.verify(text: textFieldText) {
+                        lvm.addItem(named: textFieldText)
+                        dismiss()
+                    } else {
+                        alertTitle = "Your new item is too short"
+                        showAlert.toggle()
+                    }
                 } label: {
                     Text("Save".uppercased())
                         .foregroundColor(.white)
@@ -32,6 +43,9 @@ struct AddView: View {
             }.padding(14)
         }
         .navigationTitle("Add item 🖊")
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text(alertTitle))
+        }
     }
 }
 
@@ -39,6 +53,7 @@ struct AddView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             AddView()
+                .environmentObject(ListViewModel())
         }
     }
 }

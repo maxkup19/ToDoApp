@@ -10,6 +10,11 @@ import Foundation
 struct ItemModel: Identifiable {
     let id: String = UUID().uuidString
     
-    let title: String
-    let isCompleted: Bool
+    var title: String
+    var isCompleted: Bool
+    
+    init(title: String, isCompleted: Bool = false) {
+        self.title = title
+        self.isCompleted = isCompleted
+    }
 }
