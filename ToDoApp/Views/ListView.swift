@@ -9,27 +9,31 @@ import SwiftUI
 
 struct ListView: View {
     
-    @State var items: [String] = ["first", "second", "third"]
+    @State var items: [ItemModel] = [
+        ItemModel(title: "first", isCompleted: false),
+        ItemModel(title: "second", isCompleted: false),
+        ItemModel(title: "third", isCompleted: true)
+    ]
     
     var body: some View {
-        List {
-        ForEach(items, id:\.self) { item in
-                ListRowView(title: item)
+        NavigationView {
+            List {
+                ForEach(items) {
+                    ListRowView(item: $0)
+                }
             }
+            .listStyle(.plain )
+            .navigationTitle("ToDo List 📝")
+            .navigationBarItems(
+                leading: EditButton(),
+                trailing: NavigationLink("Add", destination: AddView())
+            )
         }
-        .listStyle(.plain )
-        .navigationTitle("ToDo List 📝")
-        .navigationBarItems(
-            leading: EditButton(),
-            trailing: NavigationLink("Add", destination: AddView())
-        )
     }
 }
 
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            ListView()
-        }
+        ListView()
     }
 }
